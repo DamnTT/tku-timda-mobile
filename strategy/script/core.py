@@ -161,7 +161,10 @@ class Strategy(object):
             print('res.nav_done = ' + res.nav_done_res)
         else:
             print(req)
-            res.nav_done_res = "closed"
+            res.nav_done_res = "finish"
+            #res.nav_done_res = "closed"
+            print("Client Request to move to (x_length, y_length, theta) =\
+                     {}, {}, {} relative to current pose".format(req.x_length, req.y_length, req.theta))
         return res
 
     def handle_timda_mobile(self, req):
