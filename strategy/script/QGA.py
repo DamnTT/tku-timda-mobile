@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 from yaml import serialize
 import rospy
 import sys
@@ -11,22 +11,29 @@ from strategy.cfg import RobotConfig
 import dynamic_reconfigure.client
 from std_msgs.msg import String
 from std_msgs.msg import Int32
+from actionlib_msgs.msg import GoalID
+from diagnostic_msgs.srv import AddDiagnostics, AddDiagnosticsResponse
 import itertools
-#from navigation_tool.calculate_path_distance import Nav_cal
-from strategy.srv import wifi_srv
-from strategy.srv import TimdaMode
-WIFI_BUTTON = "wifi_module"
+# from navigation_tool.calculate_path_distance import Nav_cal
+from strategy.srv import TimdaMode, TimdaModeResponse
+from strategy.srv import aruco_relative_pose, aruco_relative_poseResponse
+from strategy.msg import TimdaMobileStatus
+ADJUST = "Timda_mobile_relative_pose"
 TIMDA_SERVER = "Timda_mobile"
+CUSTOMER = "customer_order"
+TIMDA_STATUS = "timda_mobile_status"
 
 
 class Core(Robot):
     def Callback(self, config, level):
-        self.game_start = config['game_start']
-        self.get_loc = config['get_loc']
+        self.game_start = config['Game_start']
+        self.get_loc = config['Get_loc']
         self.mode = config['Robot_mode']
         self.item = config['Item']
         self.nav_mode = config['Nav_mode']
-        self.nav_start = config['nav_start']
+        self.nav_start = config['Nav_start']
+        self.loc_reset = config['Reset_loc']
+
         return config
 
     def __init__(self, sim=False):
@@ -34,6 +41,8 @@ class Core(Robot):
         self.initial_point = self.loc
 
         dsrv = DynamicReconfigureServer(RobotConfig, self.Callback)
+
+
 
 
 class Strategy(object):
@@ -45,7 +54,7 @@ class Strategy(object):
         self.dclient = dynamic_reconfigure.client.Client(
             "core", timeout=30, config_callback=None)
         self.dclient.update_configuration(
-            {"game_start": False})
+            {"Game_start": False})
         self.cal_list = []
         self.tableNum = []
         self.service_list = []
@@ -65,7 +74,7 @@ class Strategy(object):
                         print("it is setting", self.robot.item, "position")
                         self.robot.recordPosition(self.robot.item)
                         self.dclient.update_configuration(
-                            {"get_loc": "False"})
+                            {"Get_loc": "False"})
                 elif self.robot.mode == "test":
                     self.cal_tmp2 = [1, 2, 3]
                     self.route_dict = {}
@@ -79,6 +88,7 @@ class Strategy(object):
                     self.cal_tmp2 = list(itertools.permutations(
                         self.cal_tmp2, len(self.cal_tmp2)))
                     jj = 0
+                    f = open("QGA.txt", "w")
                     for i in self.cal_tmp:
                         start = self.robot.initial_point
                         dis_tmp = 0.0
@@ -96,10 +106,15 @@ class Strategy(object):
                             start = end
                             kk = kk + 1
                         self.route_dict[str1] = dis_tmp
+                        
+                        
                         jj = jj + 1
                     self.robot.Calculate(False)
 
                     print(self.route_dict)
+                    f.write(str(self.route_dict))
+                   
+                    f.close()
                     self.dclient.update_configuration(
                         {"Robot_mode": "idle"})
 
