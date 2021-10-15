@@ -14,7 +14,6 @@ from std_msgs.msg import Int32
 from actionlib_msgs.msg import GoalID
 from diagnostic_msgs.srv import AddDiagnostics, AddDiagnosticsResponse
 import itertools
-# from navigation_tool.calculate_path_distance import Nav_cal
 from strategy.srv import TimdaMode, TimdaModeResponse
 from strategy.srv import aruco_relative_pose, aruco_relative_poseResponse
 from strategy.msg import TimdaMobileStatus
@@ -77,19 +76,6 @@ class Strategy(object):
             if self.robot.game_start == True:
                 if self.robot.mode == "Navigating":
                     if self.robot.nav_start == True:
-                        # if self.robot.nav_mode == "test":
-                        # j = 1
-                        # for i in self.robot.item_dict:
-                        #     print("going to the number " + j + " goal")
-                        #     a = self.robot.goal_client(i)
-                        #     print(a)
-                        #     j = j + 1
-                        #     while 1:
-                        #         if self.robot.status[0].status == 3:
-                        #             print("Nav stop")
-                        #             break
-                        # self.dclient.update_configuration(
-                        #     {"Nav_start": "False"})
                         print("Navigate to " + self.robot.item)
                         a = self.robot.goal_client(self.robot.item)
                         print(a)
@@ -150,8 +136,6 @@ class Strategy(object):
 
             # Server RESPONSE
             loc = self.robot.loc
-            # var_x = (req.x_length/0.2)*req.x_length
-            # var_y = (req.y_length/0.22)*req.y_length
             var_x = req.x_length
             var_y = req.y_length
             varo = 0.27

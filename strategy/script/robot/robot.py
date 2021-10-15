@@ -8,7 +8,6 @@ import sys
 import roslib
 import numpy as np
 import yaml
-# from simple_pid import PID
 from actionlib_msgs.msg import GoalID
 from actionlib_msgs.msg import GoalStatusArray
 from move_base_msgs.msg import MoveBaseActionGoal
@@ -17,7 +16,6 @@ from move_base_msgs.msg import MoveBaseGoal
 from geometry_msgs.msg import PoseStamped, Twist
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from nav_msgs.msg import Path
-# from nodeMCU_python.srv import wifi_srv
 from std_msgs.msg import Int32
 from std_msgs.msg import String
 
@@ -42,27 +40,6 @@ subscriber = None
 class Robot(object):
 
     # Configs
-    # __minimum_w = 0
-    # __maximum_w = 0
-    # __minimum_v = 0
-    # __maximum_v = 0
-    # __handle_dis = 0
-    # __handle_ang = 0
-    # Kp_v = 1.5
-    # Ki_v = 0.0
-    # Kd_v = 0.1
-    # Cp_v = 0
-    # Kp_w = 0.5
-    # Ki_w = 0.0
-    # Kd_w = 0.1
-    # Cp_w = 0
-
-    # pid_v = PID(Kp_v, Ki_v, Kd_v, setpoint=Cp_v)
-    # pid_v.output_limits = (-1*__maximum_v, __maximum_v)
-    # pid_v.auto_mode = True
-    # pid_w = PID(Kp_w, Ki_w, Kd_w, setpoint=Cp_w)
-    # pid_w.output_limits = (-1*__maximum_w, __maximum_w)
-    # pid_w.auto_mode = True
 
     def __init__(self, sim=False):
         self.loc = PoseWithCovarianceStamped()
@@ -80,9 +57,6 @@ class Robot(object):
         rospy.Subscriber("move_base/status", GoalStatusArray, self._getstatus)
         self.path_subscriber = rospy.Subscriber(
             "move_base/NavfnROS/plan", Path, self._getPath)
-        # rospy.Service('wifi_module', TABLE_SRV, self._getTableNum)
-
-       #     PATH_CALCULATE_TOPIC, Path, self.printPath)
         self.pub_goal = self._Publisher(GOAL_TOPIC, PoseStamped)
         self.pub_initial_point = self._Publisher(
             INITIALPOSE_TOPIC, PoseWithCovarianceStamped)
@@ -114,21 +88,8 @@ class Robot(object):
             print(output_x, output_y, yaw)
             self.cmdvel_pub.publish(msg)
         else:
-            # current_vector = math.hypot(output_x, output_y)
-            # output_v = self.pid_v(current_vector)
-            # output_w = self.pid_w(yaw)
-            # output_w = output_w if abs(
-            # output_w) > self.__minimum_w else self.__minimum_w * np.sign(output_w)
-
-            # magnitude = math.sqrt(output_x**2 + output_y**2)
-            # if magnitude == 0:
-            #     unit_vector = (0, 0)
-            # else:
-            #     unit_vector = (output_x / magnitude, output_y / magnitude)
 
             msg = Twist()
-            # output_x, output_y = (
-            #     unit_vector[0]*output_v, unit_vector[1]*output_v)
 
             msg.linear.x = output_x
             msg.linear.y = output_y
@@ -138,14 +99,10 @@ class Robot(object):
 
     def goal_client(self, goal):
         # Creates the SimpleActionClient, passing the type of the action
-        # (FibonacciAction) to the constructor.
         self.client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         # Waits until the action server has started up and started
         # listening for goals.
         self.client.wait_for_server()
-        # # if goal == "initial":
-        # #     goal_tmp = self.initial_point
-        # else:
         goal_tmp = self.item_dict[goal]
 
         # Creates a goal to send to the action server.
@@ -168,9 +125,6 @@ class Robot(object):
         return self.client.get_result()  # A FibonacciResult
 
     def resetLocation(self, name):
-        # if name == "initial":
-        #     self.pub_initial_point.publish(self.initial_point)
-        # else:
         self.pub_initial_point.publish(self.item_dict[name])
         print(name, "Reset done")
 
@@ -196,7 +150,6 @@ class Robot(object):
 
     def _getPosition(self, pos):
         self.loc = pos
-        # print(self.loc)
 
     def _getPath(self, path):
         if self.calculate_path == True:
@@ -223,8 +176,6 @@ class Robot(object):
     def GetCal_list(self):
         cal_list = []
 
-        # for dd in range(9):
-        #     cal_list.append(dd)
         for i in self.item_dict:
             cal_list.append(self.item_dict[i])
         return cal_list
@@ -234,15 +185,10 @@ class Robot(object):
         table_tmp = self.tableNum(0)
 
     def GetYaml(self):
-        # py_object = {'school': 'zhang',
-        #          'students': ['a', 'b']}
         file = open('position.yaml', mode='w')
         yaml.dump(self.item_dict, file, encoding=('utf-8'))
         file.close()
         print("YAML create finished")
-        # current_path = os.path.abspath(".")
-        # yaml_path = os.path.join(current_path, "generate.yaml")
-        # generate_yaml_doc(yaml_path)
 
     def LoadYaml(self):
         with open("position.yaml", 'r') as stream:
@@ -292,11 +238,6 @@ class Robot(object):
         prev_y = 0.0
         total_distance = 0.0
         if len(path.poses) > 0:
-            # if str(sys.argv[3]) == '0':
-            #     pub_stop = rospy.Publisher(
-            #         'move_base/cancel', GoalID, queue_size=10)
-            #     rospy.sleep(1)
-            #     pub_stop.publish(GoalID())
             for current_point in path.poses:
                 x = current_point.pose.position.x
                 y = current_point.pose.position.y
