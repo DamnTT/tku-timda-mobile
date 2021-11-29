@@ -37,7 +37,7 @@ RUN sed -i 's@archive.ubuntu.com@tw.archive.ubuntu.com@g' /etc/apt/sources.list
 
 # Install packages
 RUN sudo apt update && sudo apt-get install -y vim \
-    && sudo apt install -y curl && sudo apt install -y autoconf automake libtool \
+    && sudo apt install -y curl && sudo apt install -y autoconf automake libtool 
 
 RUN sudo apt install -y ros-melodic-rosbridge-server ros-melodic-actionlib ros-melodic-gazebo-ros ros-melodic-roswww ros-melodic-tf2-web-republisher ros-melodic-laser-geometry ros-melodic-pcl-ros ros-melodic-move-base
 
@@ -50,6 +50,9 @@ RUN echo "source /opt/ros/melodic/setup.bash"  >> ~/.bashrc \
     && echo "export ROS_MASTER_URI=http://localhost:11311" >> ~/.bashrc \
     && echo "export ROS_HOSTNAME=localhost" >> ~/.bashrc \
     && source ~/.bashrc \
+COPY libmodbus.sh /usr/bin/libmodbus.sh
+RUN chmod +x /usr/bin/libmodbus.sh
+RUN sh /usr/bin/libmodbus.sh 
 EXPOSE 22/tcp
 
 # Copy custom configuration scripts
