@@ -37,10 +37,13 @@ RUN sed -i 's@archive.ubuntu.com@tw.archive.ubuntu.com@g' /etc/apt/sources.list
 
 # Install packages
 RUN sudo apt update && sudo apt-get install -y vim \
-    && sudo apt install -y curl && sudo apt install -y autoconf automake libtool \
+    && sudo apt install -y curl && sudo apt install -y autoconf automake libtool 
 
-RUN sudo apt install -y ros-melodic-rosbridge-server ros-melodic-actionlib ros-melodic-gazebo-ros ros-melodic-roswww ros-melodic-tf2-web-republisher ros-melodic-laser-geometry ros-melodic-pcl-ros ros-melodic-move-base
+RUN sudo apt install -y ros-melodic-rosbridge-server ros-melodic-actionlib ros-melodic-gazebo-ros ros-melodic-roswww ros-melodic-tf2-web-republisher ros-melodic-laser-geometry ros-melodic-pcl-ros ros-melodic-move-base ros-melodic-xacro ros-melodic-hector-sensors-description ros-melodic-hector-mapping ros-melodic-hector-trajectory-server ros-melodic-hector-geotiff ros-melodic-robot-state-publisher
 
+
+RUN  curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+RUN sudo apt install -y byobu nodejs
 RUN sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential \
     && sudo apt install -y python-rosdep \
     && sudo rosdep init \
@@ -49,7 +52,11 @@ RUN su ${USER}
 RUN echo "source /opt/ros/melodic/setup.bash"  >> ~/.bashrc \
     && echo "export ROS_MASTER_URI=http://localhost:11311" >> ~/.bashrc \
     && echo "export ROS_HOSTNAME=localhost" >> ~/.bashrc \
-    && source ~/.bashrc \
+    && source ~/.bashrc 
+COPY libmodbus.sh /home/${USER}/libmodbus.sh
+Run chmod +x /home/${USER}/libmodbus.sh
+Run sh /home/${USER}/libmodbus.sh 
+
 EXPOSE 22/tcp
 
 # Copy custom configuration scripts
