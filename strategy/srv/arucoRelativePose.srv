@@ -1,0 +1,7 @@
+float32    xLength
+float32    yLength
+float32    theta
+
+---
+
+string navDoneRes

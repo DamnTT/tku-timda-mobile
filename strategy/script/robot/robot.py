@@ -73,10 +73,10 @@ class Robot(object):
         adjustFront = name + "_front"
         adjustRight = name + "_right"
         adjustLeft = name + "_left"
-        self.item_adjust.append(adjustBack)
-        self.item_adjust.append(adjustFront)
-        self.item_adjust.append(adjustLeft)
-        self.item_adjust.append(adjustRight)
+        self.itemAdjust.append(adjustBack)
+        self.itemAdjust.append(adjustFront)
+        self.itemAdjust.append(adjustLeft)
+        self.itemAdjust.append(adjustRight)
 
     def RobotCtrlS(self, outputX, outputY, yaw, passThrough=False):
         if passThrough:
@@ -166,30 +166,30 @@ class Robot(object):
 # Getting information
 #--------------------------------------------------------------------------------------------------------#
 
-    def GetPath(self):
+    def getPath(self):
         return self.path
 
-    def Getstatus(self):
+    def getstatus(self):
         return self.status
 
-    def GetcalList(self):
+    def getcalList(self):
         calList = []
 
         for i in self.itemDict:
             calList.append(self.itemDict[i])
         return calList
 
-    def GetTable(self):
+    def getTable(self):
 
         table_tmp = self.tableNum(0)
 
-    def GetYaml(self):
+    def getYaml(self):
         file = open('position.yaml', mode='w')
         yaml.dump(self.itemDict, file, encoding=('utf-8'))
         file.close()
         print("YAML create finished")
 
-    def LoadYaml(self):
+    def loadYaml(self):
         with open("position.yaml", 'r') as stream:
             self.itemDict = yaml.load(stream, Loader=yaml.CLoader)
         print("YAML load success!")
@@ -197,14 +197,14 @@ class Robot(object):
 # Calculate route function
 #--------------------------------------------------------------------------------------------------------#
 
-    def Calculate(self, cmd):
+    def calculate(self, cmd):
         if cmd == True:
             self.calculate_path = True
         else:
             self.pubInitialPoint.publish(self.currentLoc)
             self.calculate_path = False
 
-    def settingPathPoint(self, str, kk, startPoint, goal_point):
+    def settingPathPoint(self, str, kk, startPoint, goalPoint):
         self.startPoint = PoseWithCovarianceStamped()
         self.startPoint.pose.pose.position.x = startPoint.pose.pose.position.x
         self.startPoint.pose.pose.position.y = startPoint.pose.pose.position.y
@@ -216,15 +216,15 @@ class Robot(object):
         self.pubInitialPoint.publish(self.startPoint)
         print(str, kk, "Start Point sends sucessfull ")
         print("--------------------")
-        self.goal_point = PoseStamped()
-        self.goal_point.pose.position.x = goal_point.pose.pose.position.x
-        self.goal_point.pose.position.y = goal_point.pose.pose.position.y
-        self.goal_point.header.stamp = rospy.Time.now()
-        self.goal_point.pose.orientation.z = goal_point.pose.pose.orientation.z
-        self.goal_point.pose.orientation.w = goal_point.pose.pose.orientation.w
-        self.goal_point.header.frame_id = 'map'
+        self.goalPoint = PoseStamped()
+        self.goalPoint.pose.position.x = goalPoint.pose.pose.position.x
+        self.goalPoint.pose.position.y = goalPoint.pose.pose.position.y
+        self.goalPoint.header.stamp = rospy.Time.now()
+        self.goalPoint.pose.orientation.z = goalPoint.pose.pose.orientation.z
+        self.goalPoint.pose.orientation.w = goalPoint.pose.pose.orientation.w
+        self.goalPoint.header.frame_id = 'map'
         rospy.sleep(2)
-        self.pubGoal.publish(self.goal_point)
+        self.pubGoal.publish(self.goalPoint)
         print(str, kk, "Goal Point sends sucessfull")
         print("--------------------")
         print("Listening to " + "move_base/NavfnROS/plan")
@@ -232,18 +232,18 @@ class Robot(object):
 
     def PrintPath(self, path):
         # global subscriber
-        first_time = True
-        prev_x = 0.0
-        prev_y = 0.0
-        total_distance = 0.0
+        firstTime = True
+        prevX = 0.0
+        prevY = 0.0
+        totalDistance = 0.0
         if len(path.poses) > 0:
-            for current_point in path.poses:
-                x = current_point.pose.position.x
-                y = current_point.pose.position.y
-                if not first_time:
-                    total_distance += math.hypot(prev_x - x, prev_y - y)
+            for currentPoint in path.poses:
+                x = currentPoint.pose.position.x
+                y = currentPoint.pose.position.y
+                if not firstTime:
+                    totalDistance += math.hypot(prevX - x, prevY - y)
                 else:
-                    first_time = False
-                prev_x = x
-                prev_y = y
-        return total_distance
+                    firstTime = False
+                prevX = x
+                prevY = y
+        return totalDistance
