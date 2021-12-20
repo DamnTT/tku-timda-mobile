@@ -26,7 +26,7 @@ add_message_files(
 add_service_files(
   FILES
   TimdaMode.srv
-  aruco_relative_pose.srv
+  arucoRelativePose.srv
 )
 
 #add_action_files(

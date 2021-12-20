@@ -37,12 +37,12 @@ RUN sed -i 's@archive.ubuntu.com@tw.archive.ubuntu.com@g' /etc/apt/sources.list
 
 # Install packages
 RUN sudo apt update && sudo apt-get install -y vim \
-    && sudo apt install -y curl && sudo apt install -y autoconf automake libtool 
+    && sudo apt install -y curl && sudo apt install -y autoconf automake libtool nginx
 
-RUN sudo apt install -y ros-melodic-rosbridge-server ros-melodic-actionlib ros-melodic-gazebo-ros ros-melodic-roswww ros-melodic-tf2-web-republisher ros-melodic-laser-geometry ros-melodic-pcl-ros ros-melodic-move-base ros-melodic-xacro ros-melodic-hector-sensors-description ros-melodic-hector-mapping ros-melodic-hector-trajectory-server ros-melodic-hector-geotiff ros-melodic-robot-state-publisher
+RUN sudo apt install -y ros-melodic-rosbridge-server ros-melodic-actionlib ros-melodic-gazebo-ros ros-melodic-roswww ros-melodic-tf2-web-republisher ros-melodic-laser-geometry ros-melodic-pcl-ros ros-melodic-move-base ros-melodic-xacro ros-melodic-hector-sensors-description ros-melodic-hector-mapping ros-melodic-hector-trajectory-server ros-melodic-hector-geotiff ros-melodic-robot-state-publisher ros-melodic-interactive-marker-proxy ros-melodic-controller-manager
 
 
-RUN  curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
 RUN sudo apt install -y byobu nodejs
 RUN sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential \
     && sudo apt install -y python-rosdep \
