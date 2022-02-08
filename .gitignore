@@ -5,8 +5,8 @@ project_tool/
 *.tfw
 *.tif
 *.pyc
-timda_configs/maps/*.pgm
-timda_configs/maps/*.yaml
+#timda_configs/maps/*.pgm
+#timda_configs/maps/*.yaml
 bower_components/
 build/
 node_modules/
