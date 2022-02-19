@@ -4,7 +4,7 @@ var saveYaml_bool = false;
 var loadYaml_bool = false;
 
 function gameStart() {
-  if (document.getElementById("Game_start").checked) {
+  if (document.getElementById("GAME_START").checked) {
     myBoolean = Boolean(1);
   } else {
     myBoolean = Boolean(0);
@@ -15,10 +15,11 @@ function gameStart() {
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      bools: [{ name: "Game_start", value: game_start.data }],
+      bools: [{ name: "GAME_START", value: game_start.data }],
     },
   });
   dynamic_reconfigure_pub(request);
+  console.log(request);
 }
 
 function resetLoc() {
@@ -30,10 +31,11 @@ function resetLoc() {
   var get_loc = new ROSLIB.Message({
     data: myBoolean,
   });
+  console.log(get_loc);
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      bools: [{ name: "Reset_loc", value: get_loc.data }],
+      bools: [{ name: "LOC_RESET", value: get_loc.data }],
     },
   });
   dynamic_reconfigure_pub(request);
@@ -51,14 +53,15 @@ function getLoc() {
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      bools: [{ name: "Get_loc", value: get_loc.data }],
+      bools: [{ name: "LOC_GET", value: get_loc.data }],
     },
   });
+  // console.log(request);
   dynamic_reconfigure_pub(request);
 }
 
 function navStart() {
-  if (document.getElementById("Nav_start").checked) {
+  if (document.getElementById("NAV_START").checked) {
     myBoolean = Boolean(1);
   } else {
     myBoolean = Boolean(0);
@@ -69,7 +72,7 @@ function navStart() {
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      bools: [{ name: "Nav_start", value: nav_start.data }],
+      bools: [{ name: "NAV_START", value: nav_start.data }],
     },
   });
   dynamic_reconfigure_pub(request);
@@ -86,7 +89,7 @@ function navStop() {
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      bools: [{ name: "Nav_stop", value: navStop.data }],
+      bools: [{ name: "NAV_STOP", value: navStop.data }],
     },
   });
   dynamic_reconfigure_pub_stop(request);
@@ -103,7 +106,7 @@ function saveYaml() {
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      bools: [{ name: "SaveYaml", value: saveYaml.data }],
+      bools: [{ name: "YAML_SAVE", value: saveYaml.data }],
     },
   });
   dynamic_reconfigure_pub(request);
@@ -120,7 +123,7 @@ function loadYaml() {
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      bools: [{ name: "LoadYaml", value: loadYaml.data }],
+      bools: [{ name: "YAML_LOAD", value: loadYaml.data }],
     },
   });
   dynamic_reconfigure_pub(request);
@@ -128,11 +131,11 @@ function loadYaml() {
 
 function RobotMode() {
   var Robot_mode = new ROSLIB.Message({
-    data: document.getElementById("Robot_mode").value,
+    data: document.getElementById("ROBOT_MODE").value,
   });
   var request = new ROSLIB.ServiceRequest({
     config: {
-      strs: [{ name: "Robot_mode", value: Robot_mode.data }],
+      strs: [{ name: "ROBOT_MODE", value: Robot_mode.data }],
     },
   });
   dynamic_reconfigure_pub(request);
@@ -140,24 +143,24 @@ function RobotMode() {
 
 function Item1() {
   var Item = new ROSLIB.Message({
-    data: document.getElementById("Item").value,
+    data: document.getElementById("ITEM").value,
   });
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      strs: [{ name: "Item", value: Item.data }],
+      strs: [{ name: "ITEM", value: Item.data }],
     },
   });
   dynamic_reconfigure_pub(request);
 }
 function NavMode() {
   var Nav_mode = new ROSLIB.Message({
-    data: document.getElementById("Nav_mode").value,
+    data: document.getElementById("NAV_MODE").value,
   });
 
   var request = new ROSLIB.ServiceRequest({
     config: {
-      strs: [{ name: "Nav_mode", value: Nav_mode.data }],
+      strs: [{ name: "NAV_MODE", value: Nav_mode.data }],
     },
   });
   dynamic_reconfigure_pub(request);
@@ -186,8 +189,6 @@ function dynamic_reconfigure_pub_stop(request) {
   });
 }
 
-
-
 function update_rqt() {
   var listener = new ROSLIB.Topic({
     ros: ros,
@@ -196,12 +197,13 @@ function update_rqt() {
   });
 
   listener.subscribe(function (message) {
+    console.log(message);
     for (var i = 0; i < message.strs.length; i++) {
       strs_update(message.strs[i].name, message.strs[i].value);
     }
     for (var i = 0; i < message.bools.length; i++) {
       bools_update(message.bools[i].name, message.bools[i].value);
-      // console.log(message.bools[i].name+':'+message.bools[i].value);
+      // console.log(message.bools[i].name + ":" + message.bools[i].value);
     }
   });
 }

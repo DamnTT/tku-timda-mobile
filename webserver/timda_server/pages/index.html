@@ -69,10 +69,10 @@
             <h3>rqt control</h3>
             <form name='form' id='form'>
                 Game_start:
-                <input id='Game_start' type="checkbox" onclick=gameStart()><br />
+                <input id='GAME_START' type="checkbox" onclick=gameStart()><br />
                 <p></p>
                 Robot_mode:
-                <select name="Robot_mode" id='Robot_mode' onchange=RobotMode()>
+                <select name="ROBOT_MODE" id='ROBOT_MODE' onchange=RobotMode()>
                     <option value="idle">idle</option>
                     <option value="Setting">Setting</option>
                     <option value="Navigating">Navigating</option>
@@ -81,7 +81,7 @@
                 </select><br />
                 <p></p>
                 Item:
-                <select name="Item" id='Item' onchange=Item1()>
+                <select name="ITEM" id='ITEM' onchange=Item1()>
                     <option value="initial">initial</option>
                     <option value="shelf">shelf</option>
                     <option value="Table1">Table1</option>
@@ -89,25 +89,25 @@
                 </select><br />
                 <p></p>
                 Location:
-                <input type='button' id='get_loc' value='get' onclick=getLoc() /><br />
+                <input type='button' id='LOC_GET' value='get' onclick=getLoc() /><br />
                 <!-- <input id='get_loc' type="checkbox"onclick=getLoc() ><br />   -->
                 <p></p>
                 Reset_loc:
-                <input type='button' id='reset_loc' value='get' onclick=resetLoc() /><br />
+                <input type='button' id='LOC_RESET' value='get' onclick=resetLoc() /><br />
                 <p></p>
                 Nav_Mode:
-                <select name="Nav_mode" id='Nav_mode' onchange=NavMode()>
+                <select name="NAV_MODE" id='NAV_MODE' onchange=NavMode()>
                     <option value="test">On duty</option>
                     <option value="directory">directory</option>
                 </select><br />
                 <p></p>
                 Nav_Start:
-                <input id='Nav_start' type="checkbox" onclick=navStart()><br />
-                <input id='Nav_stop' type="button" value="Nav_Stop" onclick=navStop()><br />
+                <input id='NAV_START' type="checkbox" onclick=navStart()><br />
+                <input id='NAV_STOP' type="button" value="Nav_Stop" onclick=navStop()><br />
                 <p></p>
                 <div class="yaml">
-                    <input id='save_yaml' type="button" value="save" onclick=saveYaml()>
-                    <input id='load_yaml' type="button" value="load" onclick=loadYaml()><br />
+                    <input id='YAML_SAVE' type="button" value="save" onclick=saveYaml()>
+                    <input id='YAML_LOAD' type="button" value="load" onclick=loadYaml()><br />
                 </div>
                 <p></p>
                 Speed:

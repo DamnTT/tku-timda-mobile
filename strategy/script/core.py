@@ -15,7 +15,7 @@ from actionlib_msgs.msg import GoalID
 from diagnostic_msgs.srv import AddDiagnostics, AddDiagnosticsResponse
 import itertools
 from strategy.srv import TimdaMode, TimdaModeResponse
-from strategy.srv import arucoRelativePose, arucoRelativePoseResponse
+#from strategy.srv import arucoRelativePose, arucoRelativePoseResponse
 from strategy.msg import TimdaMobileStatus
 ADJUST = "Timda_mobile_relative_pose"
 TIMDA_SERVER = "Timda_mobile"
@@ -26,14 +26,14 @@ TIMDA_STATUS = "timda_mobile_status"
 class Core(Robot):
     def Callback(self, config, level):
         self.gameStart = config['GAME_START']
-        self.getLoc = config['GET_LOC']
+        self.getLoc = config['LOC_GET']
         self.mode = config['ROBOT_MODE']
         self.item = config['ITEM']
         self.navMode = config['NAV_MODE']
         self.navStart = config['NAV_START']
         self.locReset = config['LOC_RESET']
         self.yamlLoad = config['YAML_LOAD']
-        self.saveYaml = config['SAVE_YAML']
+        self.saveYaml = config['YAML_SAVE']
 
         return config
 
@@ -53,15 +53,15 @@ class Strategy(object):
         self.dclient = dynamic_reconfigure.client.Client(
             "core", timeout=30, config_callback=None)
         self.dclient.update_configuration(
-            {"gameStart": False,
-             "Robot_mode": "Idle",
-             "navStart": "False"})
+            {"GAME_START": False,
+             "ROBOT_MODE": "idle",
+             "NAV_START": "False"})
         self.calList = []
         self.tableNum = []
         self.serviceList = []
         self.stop = GoalID()
         rospy.Service(TIMDA_SERVER, TimdaMode, self.handleTimdaMobile)
-        rospy.Service(ADJUST, aruco_relative_pose, self.adjustTimda)
+        #rospy.Service(ADJUST, aruco_relative_pose, self.adjustTimda)
         rospy.Service(CUSTOMER, AddDiagnostics, self.web_customer)
         self.publishStatus = self.robot._Publisher(
             TIMDA_STATUS,  TimdaMobileStatus)
@@ -91,85 +91,85 @@ class Strategy(object):
                             if self.robot.navStart == False:
                                 break
                         self.dclient.update_configuration(
-                            {"navStart": "False"})
+                            {"NAV_START": "False"})
                         self.dclient.update_configuration(
-                            {"Robot_mode": "Idle"})
+                            {"ROBOT_MODE": "Idle"})
 
                 elif self.robot.mode == "Setting":
                     if self.robot.getLoc == True:
                         print("it is setting " + self.robot.item + "position")
                         self.robot.recordPosition(self.robot.item)
-                        self.dclient.update_configuration({"getLoc": "False"})
+                        self.dclient.update_configuration({"LOC_GET": "False"})
                     elif self.robot.locReset == True:
                         print("it is reset " + self.robot.item, " location")
                         self.robot.resetLocation(self.robot.item)
                         self.dclient.update_configuration(
-                            {"Reset_loc": "False"})
+                            {"LOC_RESET": "False"})
                 if self.robot.yamlLoad == True:
                     self.robot.loadYaml()
                     self.dclient.update_configuration(
-                        {"yamlLoad": "False"})
+                        {"YAML_LOAD": "False"})
                 elif self.robot.saveYaml == True:
                     self.robot.getYaml()
                     self.dclient.update_configuration(
-                        {"SaveYaml": "False"})
+                        {"YAML_SAVE": "False"})
             else:
                 self.dclient.update_configuration(
                     {
-                        "Robot_mode": "Idle",
-                        "navStart": "False",
-                        "getLoc": False,
-                        "Reset_loc": False,
-                        "SaveYaml": False,
-                        "yamlLoad": False
+                        "ROBOT_MODE": "idle",
+                        "NAV_START": "False",
+                        "LOC_GET": False,
+                        "LOC_RESET": False,
+                        "YAML_SAVE": False,
+                        "YAML_LOAD": False
                     })
 
 #--------------------------------------------------------------------------------------------------------#
 # Service function
 #--------------------------------------------------------------------------------------------------------#
 
-    def adjustTimda(self, req):
-        res = arucoRelativePoseResponse()
-        if self.robot.mode == "Service":
-            print("Client Request to move to (x_length, y_length, theta) =\
-                     {}, {}, {} relative to current pose".format(req.x_length, req.y_length, req.theta))
+    # def adjustTimda(self, req):
+    #     #res = arucoRelativePoseResponse()
+    #     if self.robot.mode == "Service":
+    #         print("Client Request to move to (x_length, y_length, theta) =\
+    #                  {}, {}, {} relative to current pose".format(req.x_length, req.y_length, req.theta))
 
-            # Server RESPONSE
-            loc = self.robot.loc
-            varX = req.x_length
-            varY = req.y_length
-            varo = 0.27
-            limR = 0.1
-            limV = 0.1
-            print("X adjusting start")
-            while 1:
-                disX = (loc.pose.pose.position.x + varX) - \
-                    self.robot.loc.pose.pose.position.x
-                print(disX)
-                if abs(disX) < limR:
-                    self.robot.RobotCtrlS(0, 0, 0)
-                    print("X_adjusting Stop")
-                    break
-                self.robot.RobotCtrlS(limV * disX/abs(disX), 0, 0)
-            print("Y adjusting start")
-            while 1:
-                print(disY)
-                disY = (loc.pose.pose.position.y + varY) - \
-                    self.robot.loc.pose.pose.position.y
-                self.robot.RobotCtrlS(0, limV * disY/abs(disY), 0)
-                if abs(disY) < limR:
-                    self.robot.RobotCtrlS(0, 0, 0)
-                    print("y_adjusting Stop")
-                    break
-                self.robot.RobotCtrlS(0, limV * disY/abs(disY), 0)
-            print("Adjusting Stop")
+    #         # Server RESPONSE
+    #         loc = self.robot.loc
+    #         varX = req.x_length
+    #         varY = req.y_length
+    #         varo = 0.27
+    #         limR = 0.1
+    #         limV = 0.1
+    #         print("X adjusting start")
+    #         while 1:
+    #             disX = (loc.pose.pose.position.x + varX) - \
+    #                 self.robot.loc.pose.pose.position.x
+    #             print(disX)
+    #             if abs(disX) < limR:
+    #                 self.robot.RobotCtrlS(0, 0, 0)
+    #                 print("X_adjusting Stop")
+    #                 break
+    #             self.robot.RobotCtrlS(limV * disX/abs(disX), 0, 0)
+    #         print("Y adjusting start")
+    #         while 1:
+    #             print(disY)
+    #             disY = (loc.pose.pose.position.y + varY) - \
+    #                 self.robot.loc.pose.pose.position.y
+    #             self.robot.RobotCtrlS(0, limV * disY/abs(disY), 0)
+    #             if abs(disY) < limR:
+    #                 self.robot.RobotCtrlS(0, 0, 0)
+    #                 print("y_adjusting Stop")
+    #                 break
+    #             self.robot.RobotCtrlS(0, limV * disY/abs(disY), 0)
+    #         print("Adjusting Stop")
 
-            res.nav_done_res = "finish"
-            print('res.nav_done = ' + res.nav_done_res)
-        else:
-            print(req)
-            res.nav_done_res = "closed"
-        return res
+    #         res.nav_done_res = "finish"
+    #         print('res.nav_done = ' + res.nav_done_res)
+    #     else:
+    #         print(req)
+    #         res.nav_done_res = "closed"
+    #     return res
 
     def handleTimdaMobile(self, req):
         res = TimdaModeResponse()
@@ -196,7 +196,7 @@ class Strategy(object):
                         if self.robot.navStart == False:
                             break
                     self.dclient.update_configuration(
-                        {"navStart": "False"})
+                        {"NAV_START": "False"})
                 res.nav_res = 'finish'
             elif self.robot.item_adjust.count(req.item_req) > 0:
                 loc = self.robot.loc
