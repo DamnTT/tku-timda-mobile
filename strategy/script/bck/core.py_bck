@@ -5,7 +5,6 @@ import sys
 import math
 import time
 from robot.robot import Robot
-from qga import Qga
 from my_sys import log, SysCheck, logInOne
 from dynamic_reconfigure.server import Server as DynamicReconfigureServer
 from strategy.cfg import RobotConfig
@@ -24,7 +23,7 @@ CUSTOMER = "customer_order"
 TIMDA_STATUS = "timda_mobile_status"
 
 
-class Core(Robot, Qga):
+class Core(Robot):
     def Callback(self, config, level):
         self.gameStart = config['GAME_START']
         self.getLoc = config['LOC_GET']
@@ -39,10 +38,7 @@ class Core(Robot, Qga):
         return config
 
     def __init__(self, sim=False):
-        # super(Core, self).__init__(sim)
-        Robot.__init__(self, sim)
-        Qga.__init__(self, sim)
-        print("fuck end")
+        super(Core, self).__init__(sim)
         self.initialPoint = self.loc
 
         dsrv = DynamicReconfigureServer(RobotConfig, self.Callback)
@@ -109,8 +105,6 @@ class Strategy(object):
                         self.robot.resetLocation(self.robot.item)
                         self.dclient.update_configuration(
                             {"LOC_RESET": "False"})
-                elif self.robot.mode == "test":
-                    self.test()
                 if self.robot.yamlLoad == True:
                     self.robot.loadYaml()
                     self.dclient.update_configuration(
@@ -134,27 +128,48 @@ class Strategy(object):
 # Service function
 #--------------------------------------------------------------------------------------------------------#
 
-    def test(self):
-        print("""QUANTUM GENETIC ALGORITHM""")
-        # f = open(
-        #     "/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat", "w")
-        # # fi = open("output_2.dat", "w")
-        # fi3 = open(
-        #     "/home/damn/timda-mobile/src/strategy/script/best_result.dat", "w")
+    # def adjustTimda(self, req):
+    #     #res = arucoRelativePoseResponse()
+    #     if self.robot.mode == "Service":
+    #         print("Client Request to move to (x_length, y_length, theta) =\
+    #                  {}, {}, {} relative to current pose".format(req.x_length, req.y_length, req.theta))
 
-        # input("Press Enter to continue...")
-        # selot.Init_sample()
-        print("QGA result is :", self.robot.Q_GA())
-        # fi3 = open(
-        #     "/home/damn/timda-mobile/src/strategy/script/best_result.dat", "a")
-        # # f.write(str(generation)+" "+str(fitness_average)+"\n")
-        # fi3.write(str(i)+" "+str(max)+"\n")
-        # fi3.write(" \n")
-        # fi3.close()
-        # Init_population()
-        # print(rt)
-        self.robot.plot_Output()
-        self.dclient.update_configuration({"ROBOT_MODE": "Idle"})
+    #         # Server RESPONSE
+    #         loc = self.robot.loc
+    #         varX = req.x_length
+    #         varY = req.y_length
+    #         varo = 0.27
+    #         limR = 0.1
+    #         limV = 0.1
+    #         print("X adjusting start")
+    #         while 1:
+    #             disX = (loc.pose.pose.position.x + varX) - \
+    #                 self.robot.loc.pose.pose.position.x
+    #             print(disX)
+    #             if abs(disX) < limR:
+    #                 self.robot.RobotCtrlS(0, 0, 0)
+    #                 print("X_adjusting Stop")
+    #                 break
+    #             self.robot.RobotCtrlS(limV * disX/abs(disX), 0, 0)
+    #         print("Y adjusting start")
+    #         while 1:
+    #             print(disY)
+    #             disY = (loc.pose.pose.position.y + varY) - \
+    #                 self.robot.loc.pose.pose.position.y
+    #             self.robot.RobotCtrlS(0, limV * disY/abs(disY), 0)
+    #             if abs(disY) < limR:
+    #                 self.robot.RobotCtrlS(0, 0, 0)
+    #                 print("y_adjusting Stop")
+    #                 break
+    #             self.robot.RobotCtrlS(0, limV * disY/abs(disY), 0)
+    #         print("Adjusting Stop")
+
+    #         res.nav_done_res = "finish"
+    #         print('res.nav_done = ' + res.nav_done_res)
+    #     else:
+    #         print(req)
+    #         res.nav_done_res = "closed"
+    #     return res
 
     def handleTimdaMobile(self, req):
         res = TimdaModeResponse()

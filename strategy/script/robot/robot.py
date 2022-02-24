@@ -42,6 +42,7 @@ class Robot(object):
     # Configs
 
     def __init__(self, sim=False):
+        print("fuxk")
         self.loc = PoseWithCovarianceStamped()
         self.calculate_path = False
         self.currentLoc = PoseWithCovarianceStamped()
