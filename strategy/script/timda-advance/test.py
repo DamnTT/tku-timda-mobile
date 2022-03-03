@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-import itertools
+from itertools import permutations
 
 
 rt = np.zeros(6)
@@ -9,10 +9,12 @@ obj = [[0, 0], [-4, 6], [-1, 9], [3, 1]]
 
 
 def main():
-    if "bck" in "fuck_back":
-        print("fuck back")
-    else:
-        print("fuck none")
+    itembuy()
+    # if "back" in "fuck_back":
+    #     print("fuck back")
+    # else:
+    #     print("fuck none")
+
     # list = ['a', 'b', 'c', 'd', 'e']
     # if list.count('z') > 0:
     #     print("fuck")
@@ -76,12 +78,12 @@ def main():
     #         print(j)
     # # for i in dict:
     # #     print(dict[i])
-#     list = [1, 2, 3, 4]
-# #
-#     arr = [1, 2, 3]
-#     str1 = ','.join(str(i) for i in arr)
-#     print(len(list))
-#     print(str1)
+    #     list = [1, 2, 3, 4]
+    # #
+    #     arr = [1, 2, 3]
+    #     str1 = ','.join(str(i) for i in arr)
+    #     print(len(list))
+    #     print(str1)
     # cal(1, 0, 0)
     # cal_t(1, 0, 4)
     # for i in range(1, 5):
@@ -120,6 +122,27 @@ def distance(x, y):
     r = math.sqrt(pow(x, 2) + pow(y, 2))
     return r
 
+
+def itembuy():
+    y = 0
+    array = [[0, 0], [-4, 6], [-1, 9], [3, 1]]
+    iii = []
+    x = list(permutations("0123", 4))
+    for i in x:
+        print(i)
+        y = 0
+        for k in range(len(i)):
+            if k == len(i)-1:
+                break
+            print(i[k], " plus ", i[k+1])
+            tmp = int(i[k])
+            tmp2 = int(i[k+1])
+            y = y + distance(array[tmp][0]-array[tmp2][0],
+                             array[tmp][1]-array[tmp2][1])
+        iii.append(y)
+        print("total:", y)
+
+    print(iii)
 
 # def cal_t(ggg, i):
 #     if ggg == 0:
