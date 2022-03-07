@@ -41,7 +41,7 @@ class Core(Robot, Qga):
     def __init__(self, sim=False):
         # super(Core, self).__init__(sim)
         Robot.__init__(self, sim)
-        Qga.__init__(self, sim)
+        # Qga.__init__(self, sim)
         print("fuck end")
         self.initialPoint = self.loc
 
@@ -109,8 +109,15 @@ class Strategy(object):
                         self.robot.resetLocation(self.robot.item)
                         self.dclient.update_configuration(
                             {"LOC_RESET": "False"})
+
                 elif self.robot.mode == "test":
-                    self.test()
+                    arr = self.robot.calculate(True)
+                    print("final:"+arr)
+
+                    self.dclient.update_configuration(
+                        {"ROBOT_MODE": "Idle"})
+                    # self.test()
+
                 if self.robot.yamlLoad == True:
                     self.robot.loadYaml()
                     self.dclient.update_configuration(

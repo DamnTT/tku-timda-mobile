@@ -9,7 +9,9 @@ obj = [[0, 0], [-4, 6], [-1, 9], [3, 1]]
 
 
 def main():
-    itembuy()
+    # itembuy()
+    a = "01"
+    print(int(a))
     # if "back" in "fuck_back":
     #     print("fuck back")
     # else:
@@ -125,20 +127,25 @@ def distance(x, y):
 
 def itembuy():
     y = 0
-    array = [[0, 0], [-4, 6], [-1, 9], [3, 1]]
+    array = [[3, 0], [0, 4], [3, 0], [0, 4]]
     iii = []
     x = list(permutations("0123", 4))
     for i in x:
         print(i)
         y = 0
         for k in range(len(i)):
-            if k == len(i)-1:
-                break
-            print(i[k], " plus ", i[k+1])
             tmp = int(i[k])
             tmp2 = int(i[k+1])
+            if k == 0:
+                y = y + distance(0-array[tmp][0],
+                                 0-array[tmp][1])
+            print(i[k], " plus ", i[k+1])
             y = y + distance(array[tmp][0]-array[tmp2][0],
                              array[tmp][1]-array[tmp2][1])
+            if (k+1) == len(i)-1:
+                y = y + distance(array[tmp2][0]-0,
+                                 array[tmp2][1]-0)
+                break
         iii.append(y)
         print("total:", y)
 

@@ -18,6 +18,7 @@ from geometry_msgs.msg import PoseWithCovarianceStamped
 from nav_msgs.msg import Path
 from std_msgs.msg import Int32
 from std_msgs.msg import String
+from itertools import permutations
 
 
 roslib.load_manifest('move_base')
@@ -52,6 +53,7 @@ class Robot(object):
         self.calList = []
         self.tableNum = []
         self.itemAdjust = []
+        self.arr = "0123"
         self.path = Path()
         rospy.Subscriber(
             "amcl_pose", PoseWithCovarianceStamped, self._getPosition)
@@ -180,9 +182,9 @@ class Robot(object):
             calList.append(self.itemDict[i])
         return calList
 
-    def getTable(self):
+    def getArr(self):
 
-        table_tmp = self.tableNum(0)
+        return self.arr
 
     def getYaml(self):
         file = open('position.yaml', mode='w')
@@ -199,13 +201,43 @@ class Robot(object):
 #--------------------------------------------------------------------------------------------------------#
 
     def calculate(self, cmd):
+        iii = []
         if cmd == True:
-            self.calculate_path = True
-        else:
+            self.recordPosition("Current")
+            y = 0
+            x = list(permutations(self.arr, 4))
+            for i in x:
+                print(i)
+                y = 0
+                for k in range(len(i)):
+                    tmp = "0"+i[k]
+                    tmp2 = "0"+i[k+1]
+                    if k == 0:
+                        y = y + \
+                            self.settingPathPoint(
+                                "initial", tmp, self.itemDict["initial"], self.itemDict[tmp])
+
+                    print(i[k], " plus ", i[k+1])
+                    y = y + \
+                        self.settingPathPoint(
+                            tmp, tmp2, self.itemDict["initial"], self.itemDict[tmp])
+
+                    if (k+1) == len(i)-1:
+                        y = y + \
+                            self.settingPathPoint(
+                                tmp2, "initial", self.itemDict[tmp2], self.itemDict["initial"])
+                        break
+                iii.append(y)
+                print("total:", y)
+
+            print(iii)
             self.pubInitialPoint.publish(self.currentLoc)
-            self.calculate_path = False
+        return iii
+        # else:
+        #     # self.calculate_path = False
 
     def settingPathPoint(self, str, kk, startPoint, goalPoint):
+        self.calculate_path = True
         self.startPoint = PoseWithCovarianceStamped()
         self.startPoint.pose.pose.position.x = startPoint.pose.pose.position.x
         self.startPoint.pose.pose.position.y = startPoint.pose.pose.position.y
@@ -229,7 +261,9 @@ class Robot(object):
         print(str, kk, "Goal Point sends sucessfull")
         print("--------------------")
         print("Listening to " + "move_base/NavfnROS/plan")
-        rospy.wait_for_message("move_base/NavfnROS/plan", Path)
+        # tmpPath = rospy.wait_for_message("move_base/NavfnROS/plan", Path)
+        self.calculate_path = False
+        return self.PrintPath(self.path)
 
     def PrintPath(self, path):
         # global subscriber
