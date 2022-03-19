@@ -65,7 +65,6 @@ class Qga(object):
         self.theta = 0
         self.iteration = 0
         self.the_best_chrom = 0
-        self.bestStep = []
         self.generation = 0
         #########################################################
         # QUANTUM POPULATION INITIALIZATION                     #
@@ -207,8 +206,7 @@ class Qga(object):
         fitness_average = 0
         variance = 0
         for i in range(1, self.popSize):
-            self.fitness[i][0] = 0
-            self.fitness[i][1] = 0
+            self.fitness[i] = 0
 
 #########################################################
 # Define your problem in this section. For instance:    #
@@ -228,8 +226,7 @@ class Qga(object):
                 # (Note that in this example is multiplied
                 # by a scale value, e.g. 100)
                 y = self.rt[x]
-                self.fitness[i][0] = x
-                self.fitness[i][1] = y * 100
+                self.fitness[i] = y * 100
 #########################################################
 
             # print("fitness", i, "=", self.fitness[i])
@@ -239,7 +236,7 @@ class Qga(object):
         while i <= N:
             # sum_sqr = sum_sqr+pow(fitness[i]-fitness_average, 2)
             sum_sqr = sum_sqr + \
-                pow(self.fitness[i][1]-fitness_average, 2)
+                pow(self.fitness[i]-fitness_average, 2)
             i = i+1
         variance = sum_sqr/N
         if variance <= 1.0e-4:
@@ -248,10 +245,9 @@ class Qga(object):
         self.the_best_chrom = 0
         fitness_max = self.fitness[1]
         for i in range(1, self.popSize):
-            if self.fitness[i][1] <= fitness_max:
-                fitness_max = self.fitness[i][1]
+            if self.fitness[i] <= fitness_max:
+                fitness_max = self.fitness[i]
                 self.the_best_chrom = i
-        self.bestStep.append(self.fitness[i])
         self.best_chrom[generation] = self.the_best_chrom
         # Statistical output
         print("the best num is:", self.the_best_chrom)

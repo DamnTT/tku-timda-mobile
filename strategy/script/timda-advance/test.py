@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 from itertools import permutations
+import json
 
 
 rt = np.zeros(6)
@@ -11,50 +12,8 @@ test = 10.256
 
 def main():
     # itembuy()
-    # x = list(permutations("0123", 4))
-    f = open("oo.dat", "w")
-    s = "1,3,3,4"
-    x = dict()
-    xx = dict()
-
-    # x = {"1","2","3","4"]
-    for j in range(1,10):
-        for i in range(1, 10):
-            x[str(i)]=i
-        xx[str(j)] = x
-        f.write(str(j) + ":" + str(x) +"\n")
-    #f.write("125" + ":" )
-    #f.write("\n" )
-    print(xx)
-    f.close()
-    data = open('oo.dat', 'r')
-    
-    y = dict()
-    while 1:
-        key = True
-        tmpK = ""
-        tmpV = ""
-        rt_tmp = data.readline()
-        if not rt_tmp: break
-        for i in rt_tmp:
-            if i == ":": 
-                key = False
-                continue
-            elif i == "\n":
-                break
-            if key :
-                tmpK = tmpK + i
-            else:
-                tmpV = tmpV + i
-        y[tmpK] = int(tmpV)
-        
-        
-    print(y)
-    data.close()
-    # if "back" in "fuck_back":
-    #     print("fuck back")
-    # else:
-    #     print("fuck none")
+    x = list(permutations("01234", 2))
+    print(x)
 
     # list = ['a', 'b', 'c', 'd', 'e']
     # if list.count('z') > 0:
@@ -164,40 +123,61 @@ def distance(x, y):
     return r
 
 
-def itembuy():
+def itembuy(itemBuy):
+    xx = LoadData()
     y = 0
-    array = [[3, 0], [0, 4], [3, 0], [0, 4]]
-    iii = []
-    x = list(permutations("0123", 4))
+    itemArr = []
+    x = list(permutations(itemBuy, len(itemBuy)))
+
     for i in x:
+        stepArr = []
+        stepArr.append(i)
         print(i)
         y = 0
         for k in range(len(i)):
-            tmp = int(i[k])
-            tmp2 = int(i[k+1])
+            # 判斷是否為第一項，之後再加上到初始點的距離
             if k == 0:
-                y = y + distance(0-array[tmp][0],
-                                 0-array[tmp][1])
-            print(i[k], " plus ", i[k+1])
-            y = y + distance(array[tmp][0]-array[tmp2][0],
-                             array[tmp][1]-array[tmp2][1])
+                y = y + xx["initial"][i[k+1]]
+                print("initial", " plus ", i[k], "is", y)
+
+            y = y + xx[i[k]][i[k+1]]
+            print(i[k], " plus ", i[k+1], "is", y)
+
+            # 判斷是否為最後一項，之後再加上對初始點的距離
             if (k+1) == len(i)-1:
-                y = y + distance(array[tmp2][0]-0,
-                                 array[tmp2][1]-0)
+                y = y + xx[i[k+1]]["initial"]
+                print(i[k+1], " plus ", "initial", "is", y)
                 break
-        iii.append(y)
         print("total:", y)
+        stepArr.append(y)
+        itemArr.append(stepArr)
+    print(itemArr)
 
-    print(iii)
 
-# def cal_t(ggg, i):
-#     if ggg == 0:
-#         print(i)
-#         return
-#     else:
-#         for i in range(, 5):
-#             cal_t(ggg-1, i)
-#             print("")
+def MakeData():
+    y = dict()
+    f = open("oo.dat", "w")
+    x = dict()
+    xx = dict()
+    for j in range(0, 10):
+        x["initial"] = 1
+        for i in range(0, 10):
+            x[str(i)] = i
+        if j == 0:
+            xx["initial"] = x
+        xx[str(j)] = x
+    json.dump(xx, f)
+    print(xx)
+    f.close()
+
+
+def LoadData():
+    y = dict()
+    xx = dict()
+    data = open('oo.dat', 'r')
+    y = json.load(data)
+    data.close()
+    return y
 
 
 def cal(goa, beg, route):
@@ -211,4 +191,41 @@ def cal(goa, beg, route):
     print(route_new)
 
 
-main()
+def LoadData_bck():
+    y = dict()
+    xx = dict()
+    data = open('oo.dat', 'r')
+    while 1:
+        key = True
+        tmpK = ""
+        tmpV = ""
+        rt_tmp = data.readline()
+        if not rt_tmp:
+            break
+        for i in rt_tmp:
+            if i == ":":
+                key = False
+                continue
+            elif i == "\n":
+                break
+            if key:
+                tmpK = tmpK + i
+            else:
+                tmpV = tmpV + i
+        y[tmpK] = tmpV
+    yy = y['1'][2]
+    data.close()
+    return xx
+
+
+def saveItemBuyDis():
+    test = {1, 2, 3, 4, 5, 6}
+    test2 = {1, 2, 3, 4, 5, 7}
+    icon = [[test, 10], [test2, 20]]
+    print(icon[1][0])
+
+
+# LoadData2()
+itembuy("25487")
+
+# MakeData()

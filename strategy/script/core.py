@@ -111,7 +111,13 @@ class Strategy(object):
                             {"LOC_RESET": "False"})
 
                 elif self.robot.mode == "test":
-                    self.robot.calculate_new(True)
+                    # self.test()
+                    self.robot.calculateItem(True)
+                    self.dclient.update_configuration(
+                        {"ROBOT_MODE": "Idle"})
+
+                elif self.robot.mode == "calculate":
+                    self.robot.calculateItem(True)
 
                     self.dclient.update_configuration(
                         {"ROBOT_MODE": "Idle"})

@@ -8,6 +8,7 @@ import sys
 import roslib
 import numpy as np
 import yaml
+import json
 from actionlib_msgs.msg import GoalID
 from actionlib_msgs.msg import GoalStatusArray
 from move_base_msgs.msg import MoveBaseActionGoal
@@ -58,7 +59,8 @@ class Robot(object):
         rospy.Subscriber(
             "amcl_pose", PoseWithCovarianceStamped, self._getPosition)
         rospy.Subscriber("move_base/status", GoalStatusArray, self._getstatus)
-        self.pathSubscriber = rospy.Subscriber("move_base/NavfnROS/plan", Path, self._getPath)
+        self.pathSubscriber = rospy.Subscriber(
+            "move_base/NavfnROS/plan", Path, self._getPath)
         self.pubGoal = self._Publisher(GOAL_TOPIC, PoseStamped)
         self.pubInitialPoint = self._Publisher(
             INITIALPOSE_TOPIC, PoseWithCovarianceStamped)
@@ -157,7 +159,7 @@ class Robot(object):
         if self.calculate_path == True:
             self.pubStopNav.publish(GoalID())
             self.path = path
-            print("Path=",path)
+            print("Path=", path)
         else:
             pass
 
@@ -168,6 +170,7 @@ class Robot(object):
 #--------------------------------------------------------------------------------------------------------#
 # Getting information
 #--------------------------------------------------------------------------------------------------------#
+
 
     def getPath(self):
         return self.path
@@ -200,96 +203,28 @@ class Robot(object):
 # Calculate route function
 #--------------------------------------------------------------------------------------------------------#
 
-    def calculate(self, cmd):
-        iii = []
-        if cmd == True:
-            f = open("/home/damn/timda-mobile/test.dat","w")
-            self.recordPosition("Current")
-            y = 0
-            x = list(permutations(self.arr, 4))
-            for i in x:
-                print(i)
-                y = 0
-                for k in range(len(i)):
-                    tmp = "0"+i[k]
-                    tmp2 = "0"+i[k+1]
-                    if k == 0:
-                        y = y + \
-                            self.settingPathPoint(
-                                "initial", tmp, self.itemDict["initial"], self.itemDict[tmp])
-
-                    print(i[k], " plus ", i[k+1])
-                    y = y + \
-                        self.settingPathPoint(
-                            tmp, tmp2, self.itemDict["initial"], self.itemDict[tmp])
-
-                    if (k+1) == len(i)-1:
-                        y = y + \
-                            self.settingPathPoint(
-                                tmp2, "initial", self.itemDict[tmp2], self.itemDict["initial"])
-                        break
-                
-                iii.append(y)
-                print("total:", y)
-                f.write(str(i)+":"+str(y)+"\n")
-            f.close()
-
-            print(iii)
-            self.pubInitialPoint.publish(self.currentLoc)
-        return iii
-        # else:
-        #     # self.calculate_path = False
-
-    def calculate_new(self, cmd):
-        arr = ["initial","0","1","2","3","4"]
+    def calculateItem(self, cmd):
+        arr = ["initial", "0", "1", "2", "3", "4"]
         distanceDict = dict()
         itemDict = dict()
         distance = 0
         if cmd == True:
-            f = open("/home/damn/timda-mobile/test2.dat","w")
+            f = open("/home/damn/timda-mobile/test2.dat", "w")
             self.recordPosition("Current")
-            
+
             for j in arr:
                 tmpJ = j
+                distanceDict = {}
                 for i in arr:
                     tmpI = i
-                    distance = self.settingPathPoint(tmpJ, tmpI, self.itemDict[tmpJ], self.itemDict[tmpI])
-                    distanceDict[i]=distance
+                    distance = self.settingPathPoint(
+                        tmpJ, tmpI, self.itemDict[tmpJ], self.itemDict[tmpI])
+                    distanceDict[i] = distance
                 itemDict[j] = distanceDict
-                f.write(j + ":" + str(distanceDict) +"\n")
-                distanceDict.clear()
-            # y = 0
-            # x = list(permutations(self.arr, 4))
-            # for i in arr:
-            #     print(i)
-            #     y = 0
-            #     for k in range(len(i)):
-            #         tmp = "0"+i[k]
-            #         tmp2 = "0"+i[k+1]
-            #         if k == 0:
-            #             y = y + \
-            #                 self.settingPathPoint(
-            #                     "initial", tmp, self.itemDict["initial"], self.itemDict[tmp])
-
-            #         print(i[k], " plus ", i[k+1])
-            #         y = y + \
-            #             self.settingPathPoint(
-            #                 tmp, tmp2, self.itemDict["initial"], self.itemDict[tmp])
-
-            #         if (k+1) == len(i)-1:
-            #             y = y + \
-            #                 self.settingPathPoint(
-            #                     tmp2, "initial", self.itemDict[tmp2], self.itemDict["initial"])
-            #             break
-                
-            #     iii.append(y)
-            #     print("total:", y)
-            #     f.write(str(i)+":"+str(y)+"\n")
+            json.dump(itemDict, f)
             f.close()
-            print(itemDict)
             self.pubInitialPoint.publish(self.currentLoc)
-        # else:
-        #     # self.calculate_path = False
+
     def settingPathPoint(self, str, kk, startPoint, goalPoint):
         self.calculate_path = True
         self.startPoint = PoseWithCovarianceStamped()
@@ -316,7 +251,7 @@ class Robot(object):
         print("--------------------")
         print("Listening to " + "move_base/NavfnROS/plan")
         ttttt = rospy.wait_for_message("move_base/NavfnROS/plan", Path)
-        print("ttt= ",ttttt)
+        print("ttt= ", ttttt)
         print("pathSubscriber= ", self.pathSubscriber)
         return self.PrintPath(self.path)
 
