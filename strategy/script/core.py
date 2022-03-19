@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from yaml import serialize
 import rospy
 import sys
@@ -111,8 +111,7 @@ class Strategy(object):
                             {"LOC_RESET": "False"})
 
                 elif self.robot.mode == "test":
-                    arr = self.robot.calculate(True)
-                    print("final:"+arr)
+                    self.robot.calculate_new(True)
 
                     self.dclient.update_configuration(
                         {"ROBOT_MODE": "Idle"})

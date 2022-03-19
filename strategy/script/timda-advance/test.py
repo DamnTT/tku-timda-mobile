@@ -6,12 +6,51 @@ from itertools import permutations
 
 rt = np.zeros(6)
 obj = [[0, 0], [-4, 6], [-1, 9], [3, 1]]
+test = 10.256
 
 
 def main():
     # itembuy()
-    a = "01"
-    print(int(a))
+    # x = list(permutations("0123", 4))
+    f = open("oo.dat", "w")
+    s = "1,3,3,4"
+    x = dict()
+    xx = dict()
+
+    # x = {"1","2","3","4"]
+    for j in range(1,10):
+        for i in range(1, 10):
+            x[str(i)]=i
+        xx[str(j)] = x
+        f.write(str(j) + ":" + str(x) +"\n")
+    #f.write("125" + ":" )
+    #f.write("\n" )
+    print(xx)
+    f.close()
+    data = open('oo.dat', 'r')
+    
+    y = dict()
+    while 1:
+        key = True
+        tmpK = ""
+        tmpV = ""
+        rt_tmp = data.readline()
+        if not rt_tmp: break
+        for i in rt_tmp:
+            if i == ":": 
+                key = False
+                continue
+            elif i == "\n":
+                break
+            if key :
+                tmpK = tmpK + i
+            else:
+                tmpV = tmpV + i
+        y[tmpK] = int(tmpV)
+        
+        
+    print(y)
+    data.close()
     # if "back" in "fuck_back":
     #     print("fuck back")
     # else:
