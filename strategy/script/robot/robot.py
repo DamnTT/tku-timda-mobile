@@ -50,7 +50,7 @@ class Robot(object):
         self.currentLoc = PoseWithCovarianceStamped()
         self.initialPoint = PoseWithCovarianceStamped()
         self.status = []  # waiting
-        self.itemDict = {}
+        self.itemPositionDict = {}
         self.calList = []
         self.tableNum = []
         self.itemAdjust = []
@@ -107,7 +107,7 @@ class Robot(object):
         # Waits until the action server has started up and started
         # listening for goals.
         self.client.wait_for_server()
-        goal_tmp = self.itemDict[goal]
+        goal_tmp = self.itemPositionDict[goal]
 
         # Creates a goal to send to the action server.
         self.goal = MoveBaseGoal()
@@ -129,7 +129,7 @@ class Robot(object):
         return self.client.get_result()  # A FibonacciResult
 
     def resetLocation(self, name):
-        self.pubInitialPoint.publish(self.itemDict[name])
+        self.pubInitialPoint.publish(self.itemPositionDict[name])
         print(name, "Reset done")
 
     def recordPosition(self, name):
@@ -139,7 +139,7 @@ class Robot(object):
         # elif name == "initial":
         #     self.initialPoint = self.loc
         else:
-            self.itemDict[name] = self.loc
+            self.itemPositionDict[name] = self.loc
             self.adjustMobileList(name)
         print(name, "Record done")
 #--------------------------------------------------------------------------------------------------------#
@@ -171,7 +171,6 @@ class Robot(object):
 # Getting information
 #--------------------------------------------------------------------------------------------------------#
 
-
     def getPath(self):
         return self.path
 
@@ -181,8 +180,8 @@ class Robot(object):
     def getcalList(self):
         calList = []
 
-        for i in self.itemDict:
-            calList.append(self.itemDict[i])
+        for i in self.itemPositionDict:
+            calList.append(self.itemPositionDict[i])
         return calList
 
     def getArr(self):
@@ -191,13 +190,13 @@ class Robot(object):
 
     def getYaml(self):
         file = open('position.yaml', mode='w')
-        yaml.dump(self.itemDict, file, encoding=('utf-8'))
+        yaml.dump(self.itemPositionDict, file, encoding=('utf-8'))
         file.close()
         print("YAML create finished")
 
     def loadYaml(self):
         with open("position.yaml", 'r') as stream:
-            self.itemDict = yaml.load(stream, Loader=yaml.CLoader)
+            self.itemPositionDict = yaml.load(stream, Loader=yaml.CLoader)
         print("YAML load success!")
 #--------------------------------------------------------------------------------------------------------#
 # Calculate route function

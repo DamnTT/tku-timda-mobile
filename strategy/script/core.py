@@ -41,7 +41,7 @@ class Core(Robot, Qga):
     def __init__(self, sim=False):
         # super(Core, self).__init__(sim)
         Robot.__init__(self, sim)
-        # Qga.__init__(self, sim)
+        Qga.__init__(self, sim)
         print("fuck end")
         self.initialPoint = self.loc
 
@@ -111,8 +111,8 @@ class Strategy(object):
                             {"LOC_RESET": "False"})
 
                 elif self.robot.mode == "test":
-                    # self.test()
-                    self.robot.calculateItem(True)
+                    self.test()
+                    # self.robot.calculateItem(True)
                     self.dclient.update_configuration(
                         {"ROBOT_MODE": "Idle"})
 
@@ -147,6 +147,9 @@ class Strategy(object):
 #--------------------------------------------------------------------------------------------------------#
 
     def test(self):
+        f = open(
+            "/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat", "w")
+        f.close()
         print("""QUANTUM GENETIC ALGORITHM""")
         # f = open(
         #     "/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat", "w")
@@ -156,7 +159,9 @@ class Strategy(object):
 
         # input("Press Enter to continue...")
         # selot.Init_sample()
+
         print("QGA result is :", self.robot.Q_GA())
+
         # fi3 = open(
         #     "/home/damn/timda-mobile/src/strategy/script/best_result.dat", "a")
         # # f.write(str(generation)+" "+str(fitness_average)+"\n")

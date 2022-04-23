@@ -345,7 +345,7 @@ class Qga(object):
 
     def plot_Output(self):
         data = np.loadtxt(
-            '/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat')
+            '/home/damn/timda-mobile/src/strategy/script/timda-advance/output_2.dat')
         # plot the first column as x, and second column as y
         x = data[:, 0]
         y = data[:, 1]
