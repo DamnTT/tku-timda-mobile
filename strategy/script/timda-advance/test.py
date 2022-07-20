@@ -9,11 +9,38 @@ rt = np.zeros(6)
 obj = [[0, 0], [-4, 6], [-1, 9], [3, 1]]
 test = 10.256
 
+def computeDist(dna):
+    dist = np.zeros((dna, dna))
+
+    for i in range(dna):
+        for j in range(i+1, dna):
+            d = np.sqrt(np.square(obj[i][0]-obj[j][0]) + np.square(obj[i][1]-obj[j][1]))
+            dist[i][j] = d
+            dist[j][i] = d
+    return dist
 
 def main():
+    tmp = ''
+    
     # itembuy()
-    x = list(permutations("01234", 2))
-    print(x)
+    item = [0, 1, 2, 3]
+    item2="123"
+    itemRoll = np.roll(item,-1)
+    tmp = str(itemRoll[0])
+    tmp = tmp + str(itemRoll[1])
+    print(tmp)
+    #x = list(permutations(item, len(item)))
+    #print(x)
+    #print(item)
+    #print(itemRoll)
+    #for i in itemRoll:
+    #    print(type(i))
+    #for i in item:
+    #    print(type(i))
+    #print(len(item))
+    #dist = computeDist(len(item))
+    #print(dist[item,itemRoll])
+    #print(np.sum(dist[item,itemRoll]))
 
     # list = ['a', 'b', 'c', 'd', 'e']
     # if list.count('z') > 0:
@@ -226,6 +253,5 @@ def saveItemBuyDis():
 
 
 # LoadData2()
-itembuy("25487")
-
+main()
 # MakeData()

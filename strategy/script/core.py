@@ -80,24 +80,46 @@ class Strategy(object):
             if self.robot.gameStart == True:
                 if self.robot.mode == "Navigating":
                     if self.robot.navStart == True:
-                        print("Navigate to " + self.robot.item)
-                        a = self.robot.goalClient(self.robot.item)
-                        print(a)
-                        while 1:
-                            if self.robot.status[0].status == 3:
-                                print("Nav Stop")
-                                print(self.robot.item + " Reached!")
-                                break
-                            elif self.robot.status[0].status == 5 or self.robot.status[0].status == 4 or self.robot.status[0].status == 6 or self.robot.status[0].status == 7 or self.robot.status[0].status == 2:
-                                print("Nav Cancel!")
-                                break
-                        while self.robot.navMode == "directory":
-                            if self.robot.navStart == False:
-                                break
+                        if self.robot.navMode == "directory":
+                            print("Navigate to " + self.robot.item)
+                            a = self.robot.goalClient(self.robot.item)
+                            while 1:
+                                if self.robot.status[0].status == 3:
+                                    print("Nav Stop")
+                                    print(self.robot.item + " Reached!")
+                                    break
+                                elif self.robot.status[0].status == 5 or self.robot.status[0].status == 4 or self.robot.status[0].status == 6 or self.robot.status[0].status == 7 or self.robot.status[0].status == 2:
+                                    print("Nav Cancel!")
+                                    break
+
+                        elif self.robot.navMode == "test":
+                            for i in self.theQgaBest:
+                                print("Navigate to " + i)
+                                a = self.robot.goalClient(i)
+                                while 1:
+                                    if self.robot.status[0].status == 3:
+                                        print("Nav Stop")
+                                        print(i + " Reached!")
+                                        break
+                                    elif self.robot.status[0].status == 5 or self.robot.status[0].status == 4 or self.robot.status[0].status == 6 or self.robot.status[0].status == 7 or self.robot.status[0].status == 2:
+                                        print("Nav Cancel!")
+                                        break
+
+                            print("Navigate to initial")
+                            a = self.robot.goalClient("initial")
+                            while 1:
+                                if self.robot.status[0].status == 3:
+                                    print("Nav Stop")
+                                    print(i + " Reached!")
+                                    break
+                                elif self.robot.status[0].status == 5 or self.robot.status[0].status == 4 or self.robot.status[0].status == 6 or self.robot.status[0].status == 7 or self.robot.status[0].status == 2:
+                                    print("Nav Cancel!")
+                                    break
+
                         self.dclient.update_configuration(
                             {"NAV_START": "False"})
                         self.dclient.update_configuration(
-                            {"ROBOT_MODE": "Idle"})
+                            {"ROBOT_MODE": "idle"})
 
                 elif self.robot.mode == "Setting":
                     if self.robot.getLoc == True:
@@ -112,15 +134,20 @@ class Strategy(object):
 
                 elif self.robot.mode == "test":
                     self.test()
-                    # self.robot.calculateItem(True)
-                    self.dclient.update_configuration(
-                        {"ROBOT_MODE": "Idle"})
+                    if self.robot.navMode == "directory":
+                        self.dclient.update_configuration(
+                            {"ROBOT_MODE": "idle"})
+                    elif self.robot.navMode == "test":
+                        self.dclient.update_configuration(
+                            {"ROBOT_MODE": "Navigating"})
+                        self.dclient.update_configuration(
+                            {"NAV_START": "True"})
 
                 elif self.robot.mode == "calculate":
                     self.robot.calculateItem(True)
 
                     self.dclient.update_configuration(
-                        {"ROBOT_MODE": "Idle"})
+                        {"ROBOT_MODE": "idle"})
                     # self.test()
 
                 if self.robot.yamlLoad == True:
@@ -150,28 +177,17 @@ class Strategy(object):
         f = open(
             "/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat", "w")
         f.close()
+
+        f = open(
+            "/home/damn/timda-mobile/src/strategy/script/timda-advance/output_pso.dat", "w")
+        f.close()
         print("""QUANTUM GENETIC ALGORITHM""")
-        # f = open(
-        #     "/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat", "w")
-        # # fi = open("output_2.dat", "w")
-        # fi3 = open(
-        #     "/home/damn/timda-mobile/src/strategy/script/best_result.dat", "w")
-
-        # input("Press Enter to continue...")
-        # selot.Init_sample()
-
-        print("QGA result is :", self.robot.Q_GA())
-
-        # fi3 = open(
-        #     "/home/damn/timda-mobile/src/strategy/script/best_result.dat", "a")
-        # # f.write(str(generation)+" "+str(fitness_average)+"\n")
-        # fi3.write(str(i)+" "+str(max)+"\n")
-        # fi3.write(" \n")
-        # fi3.close()
-        # Init_population()
-        # print(rt)
+        # print("QGA result is :", self.robot.Q_GA())
+        self.theQgaBest = self.robot.Q_GA()
+        self.thePsoBest = self.robot.ppp()
+        print("the QGA best:", self.theQgaBest)
+        print("the PSO best:", self.thePsoBest)
         self.robot.plot_Output()
-        self.dclient.update_configuration({"ROBOT_MODE": "Idle"})
 
     def handleTimdaMobile(self, req):
         res = TimdaModeResponse()

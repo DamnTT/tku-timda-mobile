@@ -16,20 +16,25 @@
 from __future__ import print_function
 import sys
 import math
+import time
 import json
 from itertools import permutations
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 from numpy.core.fromnumeric import ptp
+from dynamic_reconfigure.server import Server as DynamicReconfigureServer
+from strategy.cfg import RobotConfig
+import dynamic_reconfigure.client
+from pso import PSO
 
 
 #########################################################
 # ALGORITHM PARAMETERS                                  #
 #########################################################
-N = 50                  # Define here the population size
-GENOME = 7              # Define here the chromosome length
-GENERATION_MAX = 800    # Define here the maximum number of
+N = 30                 # Define here the population size
+GENOME = 22             # Define here the chromosome length
+GENERATION_MAX = 500   # Define here the maximum number of
 # generations/iterations
 
 
@@ -66,69 +71,38 @@ class Qga(object):
         self.iteration = 0
         self.the_best_chrom = 0
         self.bestStep = []
+        self.beststepArr = []
         self.generation = 0
         #########################################################
         # QUANTUM POPULATION INITIALIZATION                     #
         #########################################################
-        self.test = []
-        self.Load_sample("01234")
-
-    # def Load_sample_bck(self):
-    #     self.rt = np.zeros(int(math.pow(2, GENOME)))
-    #     for i in range(int(math.pow(2, GENOME))):
-    #         self.rt[i] = 99999999999
-    #     self.data = np.loadtxt(
-    #         '/home/damn/timda-mobile/src/strategy/script/timda-advance/output_2.dat')
-    #     # plot the first column as x, and second column as y
-    #     rt_tmp = self.data[:, 1]
-    #     k = 0
-    #     for j in rt_tmp:
-    #         self.rt[k] = j
-    #         k += 1
-    #     print("Finish data load")
 
     def Load_sample(self, itemBuy):
-        self.rt = np.zeros(int(math.pow(2, GENOME)))
-        for i in range(int(math.pow(2, GENOME))):
-            self.rt[i] = float("inf")
-
+        print(itemBuy)
         itemArr = []
         data = open('/home/damn/timda-mobile/test2.dat', 'r')
-        stepList = json.load(data)
+        self.stepList = json.load(data)
         data.close()
 
-        x = list(permutations(itemBuy, len(itemBuy)))
-        for i in x:
-            stepArr = []
-            stepArr.append(i)
-            print(i)
-            y = 0
-            for k in range(len(i)):
-                # 判斷是否為第一項，之後再加上到初始點的距離
-                if k == 0:
-                    y = y + stepList["initial"][i[k+1]]
-                    print("initial", " plus ", i[k], "is", y)
-
-                y = y + stepList[i[k]][i[k+1]]
-                print(i[k], " plus ", i[k+1], "is", y)
-
-                # 判斷是否為最後一項，之後再加上對初始點的距離
-                if (k+1) == len(i)-1:
-                    y = y + stepList[i[k+1]]["initial"]
-                    print(i[k+1], " plus ", "initial", "is", y)
-                    break
-            print("total:", y)
-            stepArr.append(y)
-            itemArr.append(stepArr)
-        k = 0
-        for j in itemArr:
-            self.rt[k] = j[1]
-            print("listNumber {} is ".format(k), self.rt[k])
-            k = k + 1
+        self.rt = list(permutations(itemBuy, len(itemBuy)))
+        self.a = len(self.rt)
+        self.genomeLength = len(bin(len(self.rt))) - 1
+        print(self.genomeLength)
+        print(len(self.rt))
+        for _ in range(int(math.pow(2, self.genomeLength-1))-len(self.rt)):
+            self.rt.append(None)
         print("Finish data load")
 
     def Init_population(self):
+        self.dclient = dynamic_reconfigure.client.Client(
+            "core", timeout=30, config_callback=None)
+
+        cfg = self.dclient.get_configuration()
+        self.item = []
         # Hadamard gate
+        for i in range(0, int(cfg['ITEM_BUY'])):
+            self.item.append(i)
+        self.Load_sample(self.item)
         r2 = math.sqrt(2.0)
         h = np.array([[1/r2, 1/r2], [1/r2, -1/r2]])
         # Rotation Q-gate
@@ -208,6 +182,7 @@ class Qga(object):
         sum_sqr = 0
         fitness_average = 0
         variance = 0
+        stepArr = [0]
         for i in range(1, self.popSize):
             self.fitness[i][0] = 0
             self.fitness[i][1] = 0
@@ -229,19 +204,41 @@ class Qga(object):
                 # the fitness value is calculated below:
                 # (Note that in this example is multiplied
                 # by a scale value, e.g. 100)
-                y = self.rt[x]
-                self.fitness[i][0] = int(x)
-                self.fitness[i][1] = y * 100
+
+            y = 0
+            stepList = []
+            if self.rt[x] is None:
+                y = 999999999
+                tmp2 = 999999999999999
+
+            else:
+                tmp = self.rt[x]
+                tmp2 = str(tmp[0])
+                for k in range(len(tmp)):
+                    # 判斷是否為第一項，之後再加上到初始點的距離
+                    if k == 0:
+                        y = y + self.stepList["initial"][str(tmp[k])]
+                    y = y + self.stepList[str(tmp[k])][str(tmp[k+1])]
+                    tmp2 = tmp2 + str(tmp[k+1])
+                    # 判斷是否為最後一項，之後再加上對初始點的距離
+                    if (k+1) == len(self.rt[x]) - 1:
+                        y = y + self.stepList[str(tmp[k+1])]["initial"]
+                        break
+
+            stepList.append(x)
+            stepList.append(tmp2)
+            stepArr.append(stepList)
+            self.fitness[i][0] = int(tmp2)
+            self.fitness[i][1] = y * 100
 #########################################################
 
-            print("fitness", i, "=", self.fitness[i])
+            # print("fitness", i, "=", self.fitness[i])
             fitness_total = fitness_total + self.fitness[i][1]
         fitness_average = fitness_total/N
         i = 1
         while i <= N:
             # sum_sqr = sum_sqr+pow(fitness[i]-fitness_average, 2)
-            sum_sqr = sum_sqr + \
-                pow(self.fitness[i][1]-fitness_average, 2)
+            sum_sqr = sum_sqr + pow(self.fitness[i][1]-fitness_average, 2)
             i = i+1
         variance = sum_sqr/N
         if variance <= 1.0e-4:
@@ -252,23 +249,23 @@ class Qga(object):
         for i in range(1, self.popSize):
             if self.fitness[i][1] <= fitness_max[1]:
                 fitness_max = self.fitness[i]
-                print("fitness_max is {}".format(fitness_max[1]))
                 self.the_best_chrom = i
-        self.bestStep.append(fitness_max)
+        self.bestStep = fitness_max
         self.best_chrom[generation] = self.the_best_chrom
+        self.bestArr = stepArr[self.the_best_chrom]
         # Statistical output
-        print("the best num is:", fitness_max[0])
-        print("the distance is :", fitness_max[1]/100)
+        # print("the best num is:", fitness_max[0])
+        # print("the distance is :", fitness_max[1]/100)
         f = open(
             "/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat", "a")
         # f.write(str(generation)+" "+str(fitness_average)+"\n")
         f.write(str(generation)+" "+str(fitness_max[1]/100)+"\n")
         f.write(" \n")
         f.close()
-        if generation == 449:
-            return fitness_max[1]/100
-        else:
-            return 0
+        # if generation == GENERATION_MAX - 1:
+        return fitness_max[1]/100
+        # else:
+        # return 0
         # print("Population size = ", popSize - 1)
         # print("mean fitness = ", fitness_average)
         # print("variance = ", variance, "\n",
@@ -285,24 +282,26 @@ class Qga(object):
         # Lookup table of the rotation angle
         for i in range(1, self.popSize):
             for j in range(1, self.genomeLength):
-                if self.fitness[i][1] < self.fitness[int(self.best_chrom[self.generation])][1]:
+                if self.fitness[i][1] > self.fitness[int(self.best_chrom[self.generation])][1]:
                   # if chromosome[i,j]==0 and chromosome[best_chrom[generation],j]==0:
                     if self.chromosome[i, j] == 0 and self.chromosome[int(self.best_chrom[self.generation]), j] == 1:
                         # Define the rotation angle: delta_theta (e.g. 0.0785398163)
-                        delta_theta = 0.0785398163
+                        # delta_theta = 0.0785398163
+                        delta_theta = 0.0985398163
                         rot[0, 0] = math.cos(delta_theta)
                         rot[0, 1] = -math.sin(delta_theta)
                         rot[1, 0] = math.sin(delta_theta)
                         rot[1, 1] = math.cos(delta_theta)
                         self.nqpv[i, j, 0] = (rot[0, 0]*self.qpv[i, j, 0]) + \
-                            (self.rot[0, 1]*self.qpv[i, j, 1])
+                            (rot[0, 1]*self.qpv[i, j, 1])
                         self.nqpv[i, j, 1] = (rot[1, 0]*self.qpv[i, j, 0]) + \
                             (rot[1, 1]*self.qpv[i, j, 1])
                         self.qpv[i, j, 0] = round(self.nqpv[i, j, 0], 2)
                         self.qpv[i, j, 1] = round(1-self.nqpv[i, j, 0], 2)
                     if self.chromosome[i, j] == 1 and self.chromosome[int(self.best_chrom[self.generation]), j] == 0:
                         # Define the rotation angle: delta_theta (e.g. -0.0785398163)
-                        delta_theta = -0.0785398163
+                        # delta_theta = -0.0785398163
+                        delta_theta = -0.0985398163
                         rot[0, 0] = math.cos(delta_theta)
                         rot[0, 1] = -math.sin(delta_theta)
                         rot[1, 0] = math.sin(delta_theta)
@@ -353,14 +352,19 @@ class Qga(object):
     def plot_Output(self):
         data = np.loadtxt(
             "/home/damn/timda-mobile/src/strategy/script/timda-advance/output.dat")
+        data2 = np.loadtxt(
+            "/home/damn/timda-mobile/src/strategy/script/timda-advance/output_pso.dat")
         # plot the first column as x, and second column as y
         x = data[:, 0]
+        x2 = data2[:, 0]
         y = data[:, 1]
+        y2 = data2[:, 1]
         # f = plt.figure()
-        plt.plot(x, y)
+        plt.plot(x, y,  color='tab:blue')
+        plt.plot(x2, y2, color='tab:orange')
         plt.xlabel('Generation')
         plt.ylabel('Fitness average')
-        plt.xlim(0.0, GENERATION_MAX)
+        plt.xlim(0.0, 300.0)
         plt.show()
 
 ########################################################
@@ -370,10 +374,15 @@ class Qga(object):
 ########################################################
 
     def Q_GA(self):
+        start = time.time()
+
+        print("The time used to execute this is given below")
+
+        self.tmpRe = 0
+        self.tmp = 0
         self.generation = 0
-        print("============== GENERATION: ", self.generation,
-              " =========================== ")
-        print()
+        # print("============== GENERATION: ", self.generation, " =========================== ")
+        # print()
         self.Init_population()
         # self.Show_population()
         self.Measure(0.5)
@@ -384,15 +393,44 @@ class Qga(object):
                     self.chromosome[i, j] = 0
             self.chromosome[i, 0] = 0
         while (self.generation < GENERATION_MAX-1):
-            print("The best of generation [",
-                  self.generation, "] ", self.best_chrom[self.generation])
-            print()
-            print("============== GENERATION: ", self.generation +
-                  1, " =========================== ")
-            print()
+            # while 1:
+            # print("The best of generation [", self.generation,
+            #       "] ", self.best_chrom[self.generation])
+            # print()
+            # print("============== GENERATION: ", self.generation +
+            #       1, " =========================== ")
+            # print()
             self.rotation()
-            self.mutation(0.01, 0.3)
+            self.mutation(0.4, 0.5)
             self.generation = self.generation+1
             self.Measure(0.5)
             re = self.Fitness_evaluation(self.generation)
-        return re
+
+            if self.tmpRe == re:
+                self.tmp = self.tmp + 1
+            else:
+                self.tmpRe = re
+                self.tmp = 0
+            if self.tmp >= 200:
+                break
+        end = time.time()
+        print("QGA total time : ", end - start)
+        print("the best step is :", self.bestArr[1])
+        print("QGA result : {} m".format(re))
+        print(
+            "------------------------------------------------------------------------------")
+        best = [str(a) for a in str(self.bestArr[1])]
+        return best
+
+    def fitnessArray(self, x):
+        return self.rt[int(x[0])]
+
+    def ppp(self):
+        start = time.time()
+        xopt, fopt, bestArr = PSO(
+            [((self.a-1)*-1, (self.a-1))]).run(threshold=1e-6)
+        end = time.time()
+        print("PSO total time : ", end - start)
+        # print("PSO：{} {}".format(fopt, xopt))
+        print("PSO：{} m".format(fopt))
+        return bestArr

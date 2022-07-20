@@ -171,6 +171,7 @@ class Robot(object):
 # Getting information
 #--------------------------------------------------------------------------------------------------------#
 
+
     def getPath(self):
         return self.path
 
@@ -203,7 +204,8 @@ class Robot(object):
 #--------------------------------------------------------------------------------------------------------#
 
     def calculateItem(self, cmd):
-        arr = ["initial", "0", "1", "2", "3", "4"]
+        arr = ["initial", "0", "1", "2", "3", "4",
+               "5", "6", "7", "8", "9", "10", "11"]
         distanceDict = dict()
         itemDict = dict()
         distance = 0
@@ -217,7 +219,7 @@ class Robot(object):
                 for i in arr:
                     tmpI = i
                     distance = self.settingPathPoint(
-                        tmpJ, tmpI, self.itemDict[tmpJ], self.itemDict[tmpI])
+                        tmpJ, tmpI, self.itemPositionDict[tmpJ], self.itemPositionDict[tmpI])
                     distanceDict[i] = distance
                 itemDict[j] = distanceDict
             json.dump(itemDict, f)

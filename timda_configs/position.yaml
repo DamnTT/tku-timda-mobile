@@ -122,6 +122,130 @@
       - 0.0
       - 0.0
       - 0.05731647621276126
+'10': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 22
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 30
+      - 418000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - -0.09037878212348563
+        - -0.08629135238566753
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - 0.5244312200159026
+        - 0.8514528145896472
+    - !!python/tuple
+      - 0.01572289150582077
+      - 0.0019591909855283174
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0019591909855283156
+      - 0.01839257796943195
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.012426120395778187
+'11': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 27
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 38
+      - 340000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - -0.8435408850858722
+        - 0.3935766052378809
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - 0.6635618613326262
+        - 0.7481214180764915
+    - !!python/tuple
+      - 0.017299743040686932
+      - 8.145843649315365e-05
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 8.145843649320916e-05
+      - 0.014238954462232056
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.00989246634777516
 '2': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
   state:
   - !!python/object/new:std_msgs.msg._Header.Header
@@ -184,6 +308,68 @@
       - 0.0
       - 0.0
       - 0.0559632475781138
+'20': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 49
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 125
+      - 732000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - -0.06507562692364825
+        - 0.20808023929526936
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - 0.021608125304378802
+        - 0.999766517203307
+    - !!python/tuple
+      - 0.01659723326990077
+      - -0.0017082564214836744
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - -0.001708256421483671
+      - 0.020479463559019487
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.008486826379666858
 '3': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
   state:
   - !!python/object/new:std_msgs.msg._Header.Header
@@ -308,15 +494,15 @@
       - 0.0
       - 0.0
       - 0.01846014663939317
-initial: !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+'5': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
   state:
   - !!python/object/new:std_msgs.msg._Header.Header
     state:
-    - 3
+    - 5
     - !!python/object/new:genpy.rostime.Time
       state:
-      - 12
-      - 586000000
+      - 21
+      - 543000000
     - map
   - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
     state:
@@ -324,29 +510,24 @@ initial: !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWi
       state:
       - !!python/object/new:geometry_msgs.msg._Point.Point
         state:
-        - 0.07564975300400908
-        - 0.097873318201758
+        - -0.25494571299198787
+        - 0.66827733128912
         - 0.0
       - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
         state:
         - 0.0
         - 0.0
-        - -0.006148373825467291
-        - 0.9999810985710191
+        - -0.010474440700731287
+        - 0.9999451415412782
     - !!python/tuple
-      - 0.23185384537675693
-      - -0.0038203714811250278
+      - 0.13379402696191373
+      - -0.0020070939296283896
       - 0.0
       - 0.0
       - 0.0
       - 0.0
-      - -0.0038203714811250286
-      - 0.23750815593256208
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
+      - -0.0020070939296283896
+      - 0.1261456327597013
       - 0.0
       - 0.0
       - 0.0
@@ -369,4 +550,319 @@ initial: !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWi
       - 0.0
       - 0.0
       - 0.0
-      - 0.06834572319382147
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.04815235835846057
+'6': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 8
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 24
+      - 399000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - -0.665671586080795
+        - -0.08018847340407609
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - -0.2055743363870398
+        - 0.9786415034214665
+    - !!python/tuple
+      - 0.06211515142593921
+      - -0.0017937849083579371
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - -0.001793784908357944
+      - 0.07935754759838347
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.03861927655810254
+'7': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 15
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 26
+      - 916000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - 0.3932840465699985
+        - 0.6276804910085958
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - 0.028677817004012722
+        - 0.9995887068249042
+    - !!python/tuple
+      - 0.02294205983758632
+      - -0.000522524426485399
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - -0.000522524426485399
+      - 0.022515262898581467
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.010259344549473554
+'8': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 17
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 28
+      - 38000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - 0.14299937621450953
+        - 0.8248518934985478
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - 0.02878110476232836
+        - 0.9995857381979096
+    - !!python/tuple
+      - 0.018648046966862685
+      - 0.0007517852809538622
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0007517852809538622
+      - 0.016401070377748628
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.007363615520789193
+'9': !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 20
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 29
+      - 126000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - 0.1672830672860232
+        - 0.1922224363265725
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - 0.02802058753027195
+        - 0.999607346248745
+    - !!python/tuple
+      - 0.008669200239814441
+      - 0.0011611686974123542
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0011611686974123542
+      - 0.013148180327650388
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.005655395166246524
+initial: !!python/object/new:geometry_msgs.msg._PoseWithCovarianceStamped.PoseWithCovarianceStamped
+  state:
+  - !!python/object/new:std_msgs.msg._Header.Header
+    state:
+    - 58
+    - !!python/object/new:genpy.rostime.Time
+      state:
+      - 132
+      - 397000000
+    - map
+  - !!python/object/new:geometry_msgs.msg._PoseWithCovariance.PoseWithCovariance
+    state:
+    - !!python/object/new:geometry_msgs.msg._Pose.Pose
+      state:
+      - !!python/object/new:geometry_msgs.msg._Point.Point
+        state:
+        - -0.9317396116096542
+        - 0.9450662285279844
+        - 0.0
+      - !!python/object/new:geometry_msgs.msg._Quaternion.Quaternion
+        state:
+        - 0.0
+        - 0.0
+        - 0.7164902022085015
+        - 0.6975971546237991
+    - !!python/tuple
+      - 0.018264512066984095
+      - -0.0004087160588732708
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - -0.0004087160588732708
+      - 0.02175310260231178
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.012590119258780374
